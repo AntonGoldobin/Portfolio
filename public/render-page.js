@@ -109,6 +109,11 @@ var plugins = [{
     "plugins": []
   }
 }, {
+  plugin: __webpack_require__(/*! ./node_modules/gatsby-plugin-offline/gatsby-ssr */ "./node_modules/gatsby-plugin-offline/gatsby-ssr.js"),
+  options: {
+    "plugins": []
+  }
+}, {
   plugin: __webpack_require__(/*! ./node_modules/gatsby-plugin-manifest/gatsby-ssr */ "./node_modules/gatsby-plugin-manifest/gatsby-ssr.js"),
   options: {
     "plugins": [],
@@ -2947,6 +2952,59 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/gatsby-plugin-offline/gatsby-ssr.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/gatsby-plugin-offline/gatsby-ssr.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+exports.__esModule = true;
+exports.onRenderBody = exports.onPreRenderHTML = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
+
+var onPreRenderHTML = function onPreRenderHTML(_ref) {
+  var getHeadComponents = _ref.getHeadComponents,
+      pathname = _ref.pathname,
+      replaceHeadComponents = _ref.replaceHeadComponents;
+  if (pathname !== "/offline-plugin-app-shell-fallback/") return;
+  var headComponents = getHeadComponents();
+  var filteredHeadComponents = headComponents.filter(function (_ref2) {
+    var type = _ref2.type,
+        props = _ref2.props;
+    return !(type === "link" && props.as === "fetch" && props.rel === "preload" && (props.href.startsWith("/static/d/") || props.href.startsWith("/page-data/")));
+  });
+  replaceHeadComponents(filteredHeadComponents);
+};
+
+exports.onPreRenderHTML = onPreRenderHTML;
+
+var onRenderBody = function onRenderBody(_ref3) {
+  var pathname = _ref3.pathname,
+      setHeadComponents = _ref3.setHeadComponents;
+
+  if (pathname !== "/offline-plugin-app-shell-fallback/") {
+    return;
+  }
+
+  setHeadComponents([/*#__PURE__*/_react.default.createElement("noscript", {
+    key: "disable-offline-shell"
+  }, /*#__PURE__*/_react.default.createElement("meta", {
+    httpEquiv: "refresh",
+    content: "0;url=/.gatsby-plugin-offline:api=disableOfflineShell&redirect=true"
+  }))]);
+};
+
+exports.onRenderBody = onRenderBody;
+
+/***/ }),
+
 /***/ "./node_modules/gatsby-plugin-react-helmet/gatsby-ssr.js":
 /*!***************************************************************!*\
   !*** ./node_modules/gatsby-plugin-react-helmet/gatsby-ssr.js ***!
@@ -3041,10 +3099,10 @@ var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ ".
 
 var _scrollHandler = __webpack_require__(/*! ./scroll-handler */ "./node_modules/gatsby-react-router-scroll/scroll-handler.js");
 
-var _router = __webpack_require__(/*! @reach/router */ "@reach/router");
-
-// TODO: In Gatsby v3, this file should be removed.
+var _router = __webpack_require__(/*! @reach/router */ "@reach/router"); // TODO: In Gatsby v3, this file should be removed.
 // We are deprecating this in V2 in favor of useScrollRestoration
+
+
 var propTypes = {
   scrollKey: _propTypes.default.string.isRequired,
   shouldUpdateScroll: _propTypes.default.func,
@@ -3071,9 +3129,9 @@ var ScrollContainerImplementation = /*#__PURE__*/function (_React$Component) {
   var _proto = ScrollContainerImplementation.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    var _this2 = this;
+    var _this2 = this; // eslint-disable-next-line react/no-find-dom-node
 
-    // eslint-disable-next-line react/no-find-dom-node
+
     var node = _reactDom.default.findDOMNode(this);
 
     var _this$props = this.props,
